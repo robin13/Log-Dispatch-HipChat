@@ -5,7 +5,7 @@ package Log::Dispatch::HipChat;
 use strict;
 use warnings;
  
-our $VERSION = '0.0002';
+our $VERSION = '0.0005';
 
 use WebService::HipChat;
 use Log::Dispatch::Output;
@@ -42,7 +42,7 @@ sub _basic_init {
         @_, {
             auth_token  => { type => SCALAR },
             room        => { type => SCALAR },
-            color       => { type => SCALAR, defaut => 'auto' },
+            color       => { type => SCALAR, optional => 1 },
         }
     );
  
@@ -62,11 +62,10 @@ sub _make_handle {
 sub log_message {
     my $self = shift;
     my %p    = @_;
-    print Dump( \%p );
 
     my $http_response;
     my $color = $p{color} || $self->{color};
-    if( $color eq 'auto' and $p{level} ){
+    if( ! $color and $p{level} ){
         if( $p{level} >= 4 ){
             $color = 'red';
         }elsif( $p{level} >= 3 ){
