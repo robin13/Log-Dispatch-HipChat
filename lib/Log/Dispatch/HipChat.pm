@@ -5,7 +5,7 @@ package Log::Dispatch::HipChat;
 use strict;
 use warnings;
  
-our $VERSION = '0.0005';
+our $VERSION = '0.0006';
 
 use WebService::HipChat;
 use Log::Dispatch::Output;
@@ -86,7 +86,6 @@ sub log_message {
     };
 
     if( $http_response ){
-        print Dump( $http_response );
         # Try to decode the response content
         try{
             my $response = HTTP::Response->parse( $http_response );
