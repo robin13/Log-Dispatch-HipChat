@@ -5,13 +5,12 @@ package Log::Dispatch::HipChat;
 use strict;
 use warnings;
  
-our $VERSION = '0.0001';
+our $VERSION = '0.0002';
 
 use WebService::HipChat;
 use Log::Dispatch::Output;
 use Try::Tiny;
 use JSON::XS qw/decode_json/;
-use YAML;
  
 use base qw( Log::Dispatch::Output );
 
@@ -43,10 +42,12 @@ sub _basic_init {
         @_, {
             auth_token  => { type => SCALAR },
             room        => { type => SCALAR },
+            color       => { type => SCALAR, defaut => 'auto' },
         }
     );
  
     $self->{room}       = $p{room};
+    $self->{color}      = $p{color};
     $self->{auth_token} = $p{auth_token};
 }
 
@@ -64,8 +65,8 @@ sub log_message {
     print Dump( \%p );
 
     my $http_response;
-    my $color = $p{color};
-    if( ! $color and $p{level} ){
+    my $color = $p{color} || $self->{color};
+    if( $color eq 'auto' and $p{level} ){
         if( $p{level} >= 4 ){
             $color = 'red';
         }elsif( $p{level} >= 3 ){
@@ -113,6 +114,13 @@ Log::Dispatch::HipChat
 =head1 DESCRIPTION
 
 Send log messages to HipChat
+
+=head1 SYNOPSIS
+
+  log4perl.appender.hipchat=Log::Dispatch::HipChat
+  log4perl.appender.hipchat.auth_token=your-auth-token
+  log4perl.appender.hipchat.room=room-to-talk-to
+  log4perl.appender.hipchat.color=color  <-- optional
 
 =head1 COPYRIGHT
 
