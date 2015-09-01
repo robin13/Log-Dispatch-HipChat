@@ -5,7 +5,7 @@ package Log::Dispatch::HipChat;
 use strict;
 use warnings;
  
-our $VERSION = '0.0006';
+our $VERSION = '0.0007';
 
 use WebService::HipChat;
 use Log::Dispatch::Output;
@@ -96,8 +96,7 @@ sub log_message {
                 die( "Could not find error message..." );
             }
         }catch{
-            die( $_ );
-            $self->log->error( sprintf( "Failed to send message to room (%s): %s", $self->{room}, $http_response ) );
+            warn( $_ );
         };
     }
 }
