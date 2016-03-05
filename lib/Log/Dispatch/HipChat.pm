@@ -66,11 +66,12 @@ sub log_message {
     my $http_response;
     my $color = $p{color} || $self->{color};
     if( ! $color and $p{level} ){
-        if( $p{level} >= 4 ){
+        my $level = $self->_level_as_number($p{level});
+        if( $level >= 4 ){
             $color = 'red';
-        }elsif( $p{level} >= 3 ){
+        }elsif( $level >= 3 ){
             $color = 'yellow';
-        }elsif( $p{level} >=1 ){
+        }elsif( $level >=1 ){
             $color = 'green';
         }else{
             $color = 'gray';
